@@ -1,31 +1,66 @@
 import { Card } from "@/components/ui/card";
-import { Table } from "@/components/ui/table";
+import { 
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
+import { FileText, AlertCircle, CheckCircle2 } from "lucide-react";
 
 const Cases = () => {
   const cases = [
     {
       id: "CASE-001",
-      title: "Digital Evidence Analysis",
-      status: "Active",
-      priority: "High",
-      lastUpdated: "2024-02-20",
+      title: "Digital Fraud Investigation",
+      status: "active",
+      lastUpdate: "2024-02-20",
+      evidence: 12,
+      priority: "high"
     },
     {
       id: "CASE-002",
-      title: "Network Traffic Investigation",
-      status: "Pending",
-      priority: "Medium",
-      lastUpdated: "2024-02-19",
+      title: "Cybersecurity Breach Analysis",
+      status: "pending",
+      lastUpdate: "2024-02-19",
+      evidence: 8,
+      priority: "medium"
     },
     {
       id: "CASE-003",
-      title: "Malware Forensics",
-      status: "Closed",
-      priority: "Low",
-      lastUpdated: "2024-02-18",
-    },
+      title: "Network Intrusion Investigation",
+      status: "completed",
+      lastUpdate: "2024-02-18",
+      evidence: 15,
+      priority: "low"
+    }
   ];
+
+  const getStatusIcon = (status: string) => {
+    switch (status) {
+      case 'active':
+        return <AlertCircle className="h-4 w-4 text-yellow-500" />;
+      case 'completed':
+        return <CheckCircle2 className="h-4 w-4 text-green-500" />;
+      default:
+        return <FileText className="h-4 w-4 text-blue-500" />;
+    }
+  };
+
+  const getPriorityColor = (priority: string) => {
+    switch (priority) {
+      case 'high':
+        return 'bg-red-500/10 text-red-500';
+      case 'medium':
+        return 'bg-yellow-500/10 text-yellow-500';
+      case 'low':
+        return 'bg-green-500/10 text-green-500';
+      default:
+        return 'bg-blue-500/10 text-blue-500';
+    }
+  };
 
   return (
     <div className="space-y-8">
@@ -38,50 +73,37 @@ const Cases = () => {
 
       <Card className="p-6">
         <Table>
-          <thead>
-            <tr>
-              <th className="text-left">Case ID</th>
-              <th className="text-left">Title</th>
-              <th className="text-left">Status</th>
-              <th className="text-left">Priority</th>
-              <th className="text-left">Last Updated</th>
-            </tr>
-          </thead>
-          <tbody>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Case ID</TableHead>
+              <TableHead>Title</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead>Last Update</TableHead>
+              <TableHead>Evidence Count</TableHead>
+              <TableHead>Priority</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
             {cases.map((case_) => (
-              <tr key={case_.id} className="hover:bg-muted/50">
-                <td className="font-medium">{case_.id}</td>
-                <td>{case_.title}</td>
-                <td>
-                  <Badge
-                    variant={
-                      case_.status === "Active"
-                        ? "default"
-                        : case_.status === "Pending"
-                        ? "secondary"
-                        : "outline"
-                    }
-                  >
-                    {case_.status}
-                  </Badge>
-                </td>
-                <td>
-                  <Badge
-                    variant={
-                      case_.priority === "High"
-                        ? "destructive"
-                        : case_.priority === "Medium"
-                        ? "secondary"
-                        : "outline"
-                    }
-                  >
+              <TableRow key={case_.id}>
+                <TableCell className="font-mono">{case_.id}</TableCell>
+                <TableCell>{case_.title}</TableCell>
+                <TableCell>
+                  <div className="flex items-center gap-2">
+                    {getStatusIcon(case_.status)}
+                    <span className="capitalize">{case_.status}</span>
+                  </div>
+                </TableCell>
+                <TableCell>{case_.lastUpdate}</TableCell>
+                <TableCell>{case_.evidence}</TableCell>
+                <TableCell>
+                  <Badge className={`${getPriorityColor(case_.priority)}`}>
                     {case_.priority}
                   </Badge>
-                </td>
-                <td className="text-muted-foreground">{case_.lastUpdated}</td>
-              </tr>
+                </TableCell>
+              </TableRow>
             ))}
-          </tbody>
+          </TableBody>
         </Table>
       </Card>
     </div>
